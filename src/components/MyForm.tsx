@@ -1,27 +1,37 @@
 import * as React from 'react';
-import {Formik, Form, Field} from "formik";
+import {Formik, Form, Field, ErrorMessage, withFormik, InjectedFormikProps, FormikErrors} from "formik";
 import {Button} from '@material-ui/core';
 import {MyField} from './formControls/MyField';
+import * as Yup from 'yup';
 
-interface Values {
-  name: string;
-  email: string;
-  password: string;
-}
+import { User } from '../types/User';
 
 interface Props {
-  onSubmit: (values: Values) => void;
+  onSubmit: (user: User) => void;
 }
 
-export const MyForm: React.FC<Props> = ({ onSubmit }) => {
+const MyForm: React.FC<InjectedFormikProps<Props, User>> = ({ onSubmit }) => {
   return (
     <Formik
       initialValues={{ name: "", email: "", password: "" }}
-      onSubmit={values => {
-        onSubmit(values);
+      onSubmit={user => {
+        onSubmit(user);
+      }}
+      validate={(values: User) => {
+        const errors: FormikErrors<User> = {};
+        if (!values.name) {
+          errors.name = "Required";
+        }
+        if (!values.email) {
+          errors.email = "Required";
+        }
+        if (!values.password) {
+          errors.password = "Required";
+        }
+        return errors;
       }}
     >
-      {({values}) => (
+      {({values, errors}) => (
         <Form>
           <div>
             <Field
@@ -30,6 +40,7 @@ export const MyForm: React.FC<Props> = ({ onSubmit }) => {
               component={MyField}
             />
           </div>
+          {errors.name}
           <div>
             <Field
               name="email"
@@ -37,6 +48,7 @@ export const MyForm: React.FC<Props> = ({ onSubmit }) => {
               component={MyField}
             />
           </div>
+          {errors.email}
           <div>
             <Field
               name="password"
@@ -44,6 +56,7 @@ export const MyForm: React.FC<Props> = ({ onSubmit }) => {
               component={MyField}
             />
           </div>
+          {errors.password}
           <Button type="submit">Submit</Button>
           <pre>{JSON.stringify(values, null, 2)}</pre>
         </Form>
@@ -51,3 +64,50 @@ export const MyForm: React.FC<Props> = ({ onSubmit }) => {
     </Formik>
   );
 }
+
+// const formikEnhancer = withFormik<Props, User>({
+//   mapPropsToValues: () => ({name: "", email: "", password: ""}),
+//
+//   validationSchema: Yup.object().shape({
+//     email: Yup.string()
+//       .email('Invalid email address')
+//       .required('Email is required!'),
+//     name: Yup.string()
+//       .required('Name is required.'),
+//   }),
+//   handleSubmit: (values, { setSubmitting, setStatus }) => {
+//     console.log("handleSubmit ---> ");
+//     setStatus(undefined);
+//     setTimeout(() => {
+//       // eslint-disable-next-line no-alert
+//       alert(JSON.stringify(values, null, 2)); // eslint-disable-line no-undef
+//       setSubmitting(false);
+//       // to set the custom error after submission.
+//       setStatus({ name: 'Username already exists.' });
+//     }, 1000);
+//   },
+//   displayName: 'MyForm', // helps with React DevTools
+// });
+
+
+const formikEnhancer = withFormik<Props, User>({
+  mapPropsToValues: () => ({name: "", email: "", password: ""}),
+
+  validationSchema: Yup.object().shape({
+    email: Yup.string()
+      .email("Email not valid")
+      .required("Email is required"),
+    password: Yup.string().required("Password is required")
+  }),
+
+  handleSubmit(
+    { email, password }: User,
+    { props, setSubmitting, setErrors }
+  ) {
+    console.log(email, password);
+  }
+})(MyForm);
+
+const MyEnhancedForm = formikEnhancer;
+
+export default MyEnhancedForm;

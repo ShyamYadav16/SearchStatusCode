@@ -4,10 +4,10 @@ import { startRemoveExpense, startEditExpense } from "../actions/expenses";
 import { submitLogin } from '../actions/user';
 import { Expense } from "../types/Expense";
 import { AppState } from "../store/configureStore";
-import { Dispatch, bindActionCreators } from "redux";
+import { bindActionCreators } from "redux";
 import { AppActions } from "../types/actions";
 import { ThunkDispatch } from "redux-thunk";
-import {MyForm} from "./MyForm";
+import MyEnhancedForm from "./MyForm";
 import {User} from "../types/User";
 
 interface HomePageProps {
@@ -46,9 +46,8 @@ export class HomePagePage extends React.Component<Props, HomePageState> {
           {/*))}*/}
         {/*</div>*/}
         <div style={{ textAlign: "center" }}>
-          <MyForm
-            onSubmit={({ name, email, password }) => {
-              let user = new User(name, email, password);
+          <MyEnhancedForm
+            onSubmit={(user: User) => {
               this.props.submitLogin(user);
             }}
           />
