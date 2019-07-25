@@ -35,6 +35,7 @@ const MyForm: React.FC<InjectedFormikProps<Props, User>> = ({ onSubmit }) => {
         <Form>
           <div>
             <Field
+              data-test="name"
               name="name"
               placeholder="Name"
               component={MyField}
@@ -104,7 +105,6 @@ const formikEnhancer = withFormik<Props, User>({
     { email, password }: User,
     { props, setSubmitting, setErrors }
   ) {
-    console.log(email, password);
   }
 })(MyForm);
 

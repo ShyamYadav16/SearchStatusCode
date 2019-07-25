@@ -3,6 +3,7 @@ import {connect} from "react-redux";
 import {AppState} from "../store/configureStore";
 import {ThunkDispatch} from "redux-thunk";
 import {AppActions} from "../types/actions";
+import MyTable from './MyTable';
 
 interface DashboardPageProps {
   id?: string;
@@ -17,7 +18,10 @@ export class Dashboard extends React.Component<Props, DashboardPageState> {
 
   render() {
     return (
-      <div>Dashboard</div>
+      <div className="dashboard">
+        Dashboard
+        <MyTable/>
+      </div>
     );
   }
 }
