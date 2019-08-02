@@ -9,11 +9,24 @@ const userReducer = (
 ): any => {
   switch (action.type) {
     case "CHECK_LOGIN":
-      console.log("Reducer ----> "+JSON.stringify(action.user));
       return action.user;
     default:
       return state;
   }
 };
 
-export { userReducer };
+const usersReducerDefaultState: User[] = [];
+
+const usersReducer = (
+  state = usersReducerDefaultState,
+  action: UserActionTypes
+): any => {
+  switch (action.type) {
+    case "FETCH_USERS":
+      return action.users;
+    default:
+      return state;
+  }
+}
+
+export { userReducer, usersReducer };

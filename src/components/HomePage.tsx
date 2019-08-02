@@ -29,6 +29,8 @@ export class HomePagePage extends React.Component<Props, HomePageState> {
 
   render() {
     const { expenses, user } = this.props;
+
+    console.log(this.props);
     return (
       <div>
         {/*<h1>Expense Page</h1>*/}

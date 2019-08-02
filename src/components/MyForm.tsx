@@ -1,5 +1,6 @@
+// import 'jsdom-global/register';
 import * as React from 'react';
-import {Formik, Form, Field, ErrorMessage, withFormik, InjectedFormikProps, FormikErrors} from "formik";
+import {Formik, Form, Field, withFormik, InjectedFormikProps, FormikErrors} from "formik";
 import {Button} from '@material-ui/core';
 import {MyField} from './formControls/MyField';
 import * as Yup from 'yup';
@@ -13,6 +14,7 @@ interface Props {
 const MyForm: React.FC<InjectedFormikProps<Props, User>> = ({ onSubmit }) => {
   return (
     <Formik
+      data-test="myForm"
       initialValues={{ name: "", email: "", password: "" }}
       onSubmit={user => {
         onSubmit(user);
